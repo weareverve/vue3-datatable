@@ -17,46 +17,47 @@
                 </thead>
                 <tbody>
                     <template v-if="filterRowCount">
-                        <tr
-                            v-for="(item, i) in filterItems"
-                            :key="item[uniqueKey] ? item[uniqueKey] : i"
-                            :class="[typeof props.rowClass === 'function' ? rowClass(item) : props.rowClass, props.selectRowOnClick ? 'bh-cursor-pointer' : '']"
-                            @click.prevent="rowClick(item, i)"
-                        >
-                            <td
-                                v-if="props.hasCheckbox"
-                                :class="{
-                                    'bh-sticky bh-left-0 bh-bg-blue-light': props.stickyFirstColumn,
-                                }"
+                        <template v-for="(item, i) in filterItems" :key="item[uniqueKey] ? item[uniqueKey] : i">
+                            <tr
+                                :class="[typeof props.rowClass === 'function' ? rowClass(item) : props.rowClass, props.selectRowOnClick ? 'bh-cursor-pointer' : '']"
+                                @click.prevent="rowClick(item, i)"
                             >
-                                <div class="bh-checkbox">
-                                    <input v-model="selected" type="checkbox" :value="item[uniqueKey] ? item[uniqueKey] : i" @click.stop />
-                                    <div>
-                                        <icon-check class="check" />
-                                    </div>
-                                </div>
-                            </td>
-                            <template v-for="(col, j) in props.columns">
                                 <td
-                                    v-if="!col.hide"
-                                    :key="col.field"
-                                    :class="[
-                                        typeof props.cellClass === 'function' ? cellClass(item) : props.cellClass,
-                                        j === 0 && props.stickyFirstColumn ? 'bh-sticky bh-left-0 bh-bg-blue-light' : '',
-                                        props.hasCheckbox && j === 0 && props.stickyFirstColumn ? 'bh-left-[52px]' : '',
-                                        col.cellClass ? col.cellClass : '',
-                                    ]"
+                                    v-if="props.hasCheckbox"
+                                    :class="{
+                                        'bh-sticky bh-left-0 bh-bg-blue-light': props.stickyFirstColumn,
+                                    }"
                                 >
-                                    <template v-if="slots[col.field]">
-                                        <slot :name="col.field" :value="item"></slot>
-                                    </template>
-                                    <div v-else-if="col.cellRenderer" v-html="col.cellRenderer(item)"></div>
-                                    <template v-else>
-                                        {{ cellValue(item, col.field) }}
-                                    </template>
+                                    <div class="bh-checkbox">
+                                        <input v-model="selected" type="checkbox" :value="item[uniqueKey] ? item[uniqueKey] : i" @click.stop />
+                                        <div>
+                                            <icon-check class="check" />
+                                        </div>
+                                    </div>
                                 </td>
-                            </template>
-                        </tr>
+                                    <template v-for="(col, j) in props.columns">
+                                        <td
+                                            v-if="!col.hide"
+                                            :key="col.field"
+                                            :class="[
+                                                typeof props.cellClass === 'function' ? cellClass(item) : props.cellClass,
+                                                j === 0 && props.stickyFirstColumn ? 'bh-sticky bh-left-0 bh-bg-blue-light' : '',
+                                                props.hasCheckbox && j === 0 && props.stickyFirstColumn ? 'bh-left-[52px]' : '',
+                                                col.cellClass ? col.cellClass : '',
+                                            ]"
+                                        >
+                                            <template v-if="slots[col.field]">
+                                                <slot :name="col.field" :value="item"></slot>
+                                            </template>
+                                            <div v-else-if="col.cellRenderer" v-html="col.cellRenderer(item)"></div>
+                                            <template v-else>
+                                                {{ cellValue(item, col.field) }}
+                                            </template>
+                                        </td>
+                                    </template>
+                            </tr>
+                            <slot name="accordion" :value="item" />
+                        </template>
                     </template>
                     <tr v-if="!filterRowCount && !currentLoader">
                         <td :colspan="props.columns.length + 1">
