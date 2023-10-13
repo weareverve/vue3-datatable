@@ -47,7 +47,7 @@
                                             ]"
                                         >
                                             <template v-if="slots[col.field]">
-                                                <slot :name="col.field" :value="item" :toggleAccordion="() => toggleAccordion(item[uniqueKey])" ></slot>
+                                                <slot :name="col.field" :value="item" :toggleAccordion="() => toggleAccordion(item[uniqueKey])" :accordionOpen="openAccordions.includes(item[uniqueKey])" ></slot>
                                             </template>
                                             <div v-else-if="col.cellRenderer" v-html="col.cellRenderer(item)"></div>
                                             <template v-else>

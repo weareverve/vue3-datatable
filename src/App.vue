@@ -29,7 +29,7 @@
             @change="changeServer"
         >
             <template #firstName="data">
-                <button @click="data.toggleAccordion">Click me to open accordion</button>
+                <button @click="data.toggleAccordion">Click me to {{ data.accordionOpen ? 'close' : 'open'}} the accordion</button>
             </template>
             <template #accordion>
                 Accordion content
