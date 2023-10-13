@@ -28,6 +28,12 @@
             :columnFilter="false"
             @change="changeServer"
         >
+            <template #firstName="data">
+                <button @click="data.toggleAccordion">Click me to open accordion</button>
+            </template>
+            <template #accordion>
+                Accordion content
+            </template>
         </vue3-datatable>
     </div>
 </template>

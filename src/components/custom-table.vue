@@ -47,7 +47,7 @@
                                             ]"
                                         >
                                             <template v-if="slots[col.field]">
-                                                <slot :name="col.field" :value="item"></slot>
+                                                <slot :name="col.field" :value="item" :toggleAccordion="() => toggleAccordion(item[uniqueKey])" ></slot>
                                             </template>
                                             <div v-else-if="col.cellRenderer" v-html="col.cellRenderer(item)"></div>
                                             <template v-else>
@@ -56,7 +56,11 @@
                                         </td>
                                     </template>
                             </tr>
-                            <slot name="accordion" :value="item" />
+                            <tr v-if="openAccordions.includes(item[uniqueKey])" class="!border-0">
+                                <td colspan="100">
+                                    <slot name="accordion" :value="item" />
+                                </td>
+                            </tr>
                         </template>
                     </template>
                     <tr v-if="!filterRowCount && !currentLoader">
@@ -302,6 +306,16 @@ const selectedAll: any = ref(null);
 const currentLoader = ref(props.loading);
 const currentSearch = ref(props.search);
 const oldColumns = JSON.parse(JSON.stringify(props.columns));
+const openAccordions = ref([]);
+
+const toggleAccordion = (uniqueId) => {
+    if (openAccordions.value.includes(uniqueId)) {
+        openAccordions.value = openAccordions.value.filter((existingId) => existingId !== uniqueId);
+        return;
+    }
+
+    openAccordions.value.push(uniqueId);
+};
 
 const isOpenFilter: any = ref(null);
 
